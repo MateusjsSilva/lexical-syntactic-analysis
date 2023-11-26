@@ -1,9 +1,10 @@
 var {
-    float x;
-    int y, z;
-} 
+    int j;
+}
 program {
-    x = 2.5;
-    y = 6 + 3 + z;
-    print ("x \" ", x, " ", y); // Escreve: x 2.5 9
+    j = 1;
+    while (j <= 10) {
+        print (j);
+        j = j + 1;
+    }
 }

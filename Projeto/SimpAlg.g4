@@ -1,69 +1,104 @@
 grammar SimpAlg;
 
-// Regra principal do programa
-program: 'var' '{' declarations '}' 'program' '{' commands '}';
+// Um programa é composto por uma seção de variáveis e uma seção de programa
+program: varSection programSection EOF;
 
-// Regras para declarações de variáveis
-declarations: (variableDeclaration ';')*;
+// Seção de variáveis contém declarações de variáveis
+varSection: 'var' '{' varDeclaration* '}';
 
+// Cada declaração de variável termina com um ponto e vírgula
+varDeclaration: variableDeclaration ';';
+
+// Uma declaração de variável é composta por um tipo e uma lista de identificadores
 variableDeclaration: type identifierList;
 
+// Os tipos suportados são int e float
 type: 'int' | 'float';
 
-identifierList: identifier (',' identifier)*;
+// Uma lista de identificadores é composta por um ou mais IDs separados por vírgulas
+identifierList: ID (',' ID)*;
 
-// Regras para comandos do programa
-commands: command*;
+// A seção do programa contém comandos
+programSection: 'program' '{' command* '}';
 
-command: assignment
-        | printCommand
-        | scanCommand
-        | ifElseCommand
-        | whileCommand;
+// Um comando pode ser um dos seguintes
+command:
+	printCommand
+	| scanCommand
+	| assignment
+	| ifCommand
+	| whileCommand;
 
-// Regra para atribuição de valores a variáveis
-assignment: identifier '=' expression ';';
-
-// Regras para comandos de saída de dados
+// Comando de impressão
 printCommand: 'print' '(' printList ')' ';';
 
-printList: (identifier | STRING) (',' (identifier | STRING))*;
+// Lista de impressão
+printList: (ID | STRING) (',' (ID | STRING))*;
 
-// Regras para comandos de entrada de dados
-scanCommand: 'scan' '(' identifierList ')' ';';
+// Comando de leitura
+scanCommand: 'scan' '(' scanList ')' ';';
 
-// Regras para comandos condicionais
-ifElseCommand: 'if' '(' expression ')' '{' commands '}' ('else' '{' commands '}')?;
+// Lista de leitura
+scanList: ID (',' ID)*;
 
-// Regras para comandos de repetição
-whileCommand: 'while' '(' expression ')' '{' commands '}';
+// Atribuição
+assignment: ID '=' arithExpr ';';
 
-// Regras para expressões aritméticas, relacionais e lógicas
-expression: atom
-          | expression ('*' | '/' | '+' | '-') expression
-          | expression ('<' | '<=' | '>' | '>=') expression
-          | expression ('==' | '!=') expression
-          | '!' expression
-          | '(' expression ')';
+// Comando if
+ifCommand:
+	'if' '(' boolExpr ')' '{' command* '}' (
+		'else' '{' command* '}'
+	)?;
 
-// Regras para átomos (variáveis, números, strings, valores lógicos)
-atom: IDENTIFIER | INT | FLOAT | STRING | 'true' | 'false';
+// Comando while
+whileCommand: 'while' '(' boolExpr ')' '{' command* '}';
 
-identifier: IDENTIFIER;
+// Expressão aritmética
+arithExpr:
+	arithExpr '+' multExpr
+	| arithExpr '-' multExpr
+	| multExpr;
 
-// Regras para identificadores (nomes de variáveis)
-IDENTIFIER: [A-Za-z][a-zA-Z0-9]*;
+// Expressão de multiplicação
+multExpr:
+	multExpr '*' unaryExpr
+	| multExpr '/' unaryExpr
+	| unaryExpr '%' unaryExpr
+	| unaryExpr;
 
-// Regra para strings
-STRING: '"' (~[\\"\n] | '\\' ["\\])* '"';
+// Expressão unária
+unaryExpr: '-' unaryExpr | primaryExpr;
 
-// Regra para comentários
-COMMENT: '//' ~[\r\n]* -> skip;
+// Expressão primária
+primaryExpr: INT | FLOAT | '(' arithExpr ')' | ID;
 
-// Regra para ignorar espaços em branco, tabulações e quebras de linha
-WS: [ \t\r\n]+ -> skip;
+// Expressão booleana
+boolExpr: boolExpr ('and' | 'or') boolTerm | boolTerm;
 
-// Regras para números
+// Termo booleano
+boolTerm:
+	'!' boolTerm
+	| arithExpr relOp arithExpr
+	| '(' boolExpr ')'
+	| ID;
+
+// Operadores relacionais
+relOp: '>' | '>=' | '<' | '<=' | '==' | '!=';
+
+// Identificador
+ID: [a-zA-Z][a-zA-Z0-9]*;
+
+// Inteiro
 INT: [0-9]+;
 
-FLOAT: [0-9]+ '.' [0-9];
+// Float
+FLOAT: [0-9]+ '.' [0-9]*;
+
+// String
+STRING: '"' (~["\r\n\\] | '\\' .)* '"';
+
+// Comentário
+COMMENT: '//' ~[\r\n]* -> skip;
+
+// Espaço em branco
+WS: [ \t\r\n]+ -> skip;
