@@ -1,0 +1,9 @@
+var {
+    float x;
+    int y, z;
+} 
+program {
+    x = 2.5;
+    y = 6 + 3 + z;
+    print ("x \" ", x, " ", y); // Escreve: x 2.5 9
+}
