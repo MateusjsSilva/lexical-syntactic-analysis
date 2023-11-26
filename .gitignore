@@ -1,5 +1,5 @@
-# Created by https://www.toptal.com/developers/gitignore/api/vs,java
-# Edit at https://www.toptal.com/developers/gitignore?templates=vs,java
+# Created by https://www.toptal.com/developers/gitignore/api/visualstudiocode,vs,java
+# Edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode,vs,java
 
 ### Java ###
 # Compiled class file
@@ -26,6 +26,25 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
+
+### VisualStudioCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+
+# Local History for Visual Studio Code
+.history/
+
+# Built Visual Studio Code Extensions
+*.vsix
+
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+.history
+.ionide
 
 ### vs ###
 ## Ignore Visual Studio temporary files, build results, and
@@ -381,4 +400,4 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 
-# End of https://www.toptal.com/developers/gitignore/api/vs,java
+# End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,vs,java
