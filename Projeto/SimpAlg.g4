@@ -33,7 +33,9 @@ command:
 printCommand: 'print' '(' printList ')' ';';
 
 // Lista de impressão
-printList: (ID | STRING) (',' (ID | STRING))*;
+printList: (ID | STRING | INT | FLOAT) (
+		',' (ID | STRING | INT | FLOAT)
+	)*;
 
 // Comando de leitura
 scanCommand: 'scan' '(' scanList ')' ';';
@@ -55,35 +57,29 @@ whileCommand: 'while' '(' boolExpr ')' '{' command* '}';
 
 // Expressão aritmética
 arithExpr:
-	arithExpr '+' multExpr
-	| arithExpr '-' multExpr
-	| multExpr;
+	<assoc = right> arithExpr ('*' | '/') arithExpr
+	| <assoc = right> arithExpr ('+' | '-') arithExpr
+	| <assoc = right> arithExpr '%' arithExprInt
+	| '(' arithExpr ')'
+	| ('-' | '+')? (INT | FLOAT | ID);
 
-// Expressão de multiplicação
-multExpr:
-	multExpr '*' unaryExpr
-	| multExpr '/' unaryExpr
-	| unaryExpr '%' unaryExpr
-	| unaryExpr;
-
-// Expressão unária
-unaryExpr: '-' unaryExpr | primaryExpr;
-
-// Expressão primária
-primaryExpr: INT | FLOAT | '(' arithExpr ')' | ID;
+// Expressão aritmética (para INT)
+arithExprInt:
+	<assoc = right> arithExprInt ('*' | '/') arithExprInt
+	| <assoc = right> arithExprInt ('+' | '-') arithExprInt
+	| <assoc = right> arithExprInt '%' arithExprInt
+	| '(' arithExprInt ')'
+	| ('-' | '+')? (INT | ID);
 
 // Expressão booleana
-boolExpr: boolExpr ('and' | 'or') boolTerm | boolTerm;
-
-// Termo booleano
-boolTerm:
-	'!' boolTerm
-	| arithExpr relOp arithExpr
-	| '(' boolExpr ')'
-	| ID;
+boolExpr:
+    boolExpr ('and' | 'or') boolExpr
+    |'(' boolExpr ')'
+	| '!' boolExpr
+	| (INT | FLOAT | ID) relOp (INT | FLOAT | ID);
 
 // Operadores relacionais
-relOp: '>' | '>=' | '<' | '<=' | '==' | '!=';
+relOp: '>=' | '<=' | '<' | '>' | '==' | '!=';
 
 // Identificador
 ID: [a-zA-Z][a-zA-Z0-9]*;

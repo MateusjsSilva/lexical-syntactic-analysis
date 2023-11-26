@@ -4,6 +4,7 @@ import java.nio.file.Paths;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 public class Main {
@@ -19,6 +20,12 @@ public class Main {
 
         // cria um buffer de tokens puxados do lexer
         CommonTokenStream tokens = new CommonTokenStream(lexer);
+
+        // imprime todos os tokens
+        tokens.fill();
+        for (Token token : tokens.getTokens()) {
+            System.out.println(token.toString());
+        }
 
         // cria um parser que alimenta fora do buffer de tokens
         SimpAlgParser parser = new SimpAlgParser(tokens);
