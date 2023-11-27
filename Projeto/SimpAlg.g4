@@ -3,7 +3,7 @@ grammar SimpAlg;
 // Um programa é composto por uma seção de variáveis e uma seção de programa
 program: varSection programSection EOF;
 
-// Seção de variáveis contém declarações de variáveis
+// A seção de variáveis contém declarações de variáveis
 varSection: 'var' '{' varDeclaration* '}';
 
 // Cada declaração de variável termina com um ponto e vírgula
@@ -27,7 +27,8 @@ command:
 	| scanCommand
 	| assignment
 	| ifCommand
-	| whileCommand;
+	| whileCommand
+	| forCommand;
 
 // Comando de impressão
 printCommand: 'print' '(' printList ')' ';';
@@ -55,26 +56,21 @@ ifCommand:
 // Comando while
 whileCommand: 'while' '(' boolExpr ')' '{' command* '}';
 
+// Comando for
+forCommand: 'for' '(' assignment ';' boolExpr ';' assignment ')' '{' command* '}';
+
 // Expressão aritmética
 arithExpr:
-	<assoc = right> arithExpr ('*' | '/') arithExpr
-	| <assoc = right> arithExpr ('+' | '-') arithExpr
-	| <assoc = right> arithExpr '%' arithExprInt
-	| '(' arithExpr ')'
-	| ('-' | '+')? (INT | FLOAT | ID);
-
-// Expressão aritmética (para INT)
-arithExprInt:
-	<assoc = right> arithExprInt ('*' | '/') arithExprInt
-	| <assoc = right> arithExprInt ('+' | '-') arithExprInt
-	| <assoc = right> arithExprInt '%' arithExprInt
-	| '(' arithExprInt ')'
-	| ('-' | '+')? (INT | ID);
+	<assoc = left> arithExpr ('*' | '/') arithExpr
+	| <assoc = left> arithExpr '%' INT
+	| <assoc = left> arithExpr ('+' | '-') arithExpr
+	| (INT | FLOAT | ID)
+	| '(' arithExpr ')';
 
 // Expressão booleana
 boolExpr:
-    boolExpr ('and' | 'or') boolExpr
-    |'(' boolExpr ')'
+	boolExpr ('and' | 'or') boolExpr
+	| '(' boolExpr ')'
 	| '!' boolExpr
 	| (INT | FLOAT | ID) relOp (INT | FLOAT | ID);
 
@@ -85,10 +81,13 @@ relOp: '>=' | '<=' | '<' | '>' | '==' | '!=';
 ID: [a-zA-Z][a-zA-Z0-9]*;
 
 // Inteiro
-INT: [0-9]+;
+INT: ('-' | '+')? [0-9]+;
+
+// Inteiro (aceita espaço entre o sinal e o numero)
+// INT: ('-' | '+') WS* [0-9]+;
 
 // Float
-FLOAT: [0-9]+ '.' [0-9]*;
+FLOAT: ('-' | '+')? [0-9]+ '.' [0-9]*;
 
 // String
 STRING: '"' (~["\r\n\\] | '\\' .)* '"';

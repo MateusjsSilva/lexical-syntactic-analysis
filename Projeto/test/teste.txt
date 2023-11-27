@@ -1,21 +1,21 @@
 var {
-    int x, y;
-    float Valor1, Valor2, Valor3;
-    float Valor4;
+   // int x, y;
+    //float Valor1, Valor2, Valor3;
+    //float Valor4;
 
     // esse é um comentario
     // tem mais de uma linha
 }
 program {
-    x = -2 + 2;
+    //x = -2 + 2;
     //y = x + y * 9;
     //a = a + 2;
 
-    if(!(x <= y) and x > b){
-        scan(a,b,c);
-    }
+    //if(!(x <= y) and x > b){
+    //    scan(a,b,c);
+    //}
 
-    //x = (1/2) * 5+ 2;
+    //x = 1/2 * 5 + 2;
     //x = 1 - (2 % 2);
 
     //while( a < 5 and (5 < 8 or a > 9) ){
@@ -23,16 +23,6 @@ program {
     //        scan(a,b,c);
     //    }
     //}
-
-while(a < b and b < c){
-    if(a <b){
-        if(a != 0){
-
-        }else{
-
-        }
-    }
-    }
 
     //print("Olá \"Mateus\", tenho: ", 20, "anos e minha altura é ", 1.70);
 }
