@@ -74,7 +74,7 @@ arithExprInt:
 boolExpr:
 	boolExpr ('and' | 'or') boolExpr
 	| '(' boolExpr ')'
-	| '!' boolExpr
+	| '!' '(' boolExpr ')'
 	| (INT | FLOAT | ID) relOp (INT | FLOAT | ID);
 
 // Operadores relacionais
