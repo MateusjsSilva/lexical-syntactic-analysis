@@ -27,8 +27,7 @@ command:
 	| scanCommand
 	| assignment
 	| ifCommand
-	| whileCommand
-	| forCommand;
+	| whileCommand;
 
 // Comando de impressão
 printCommand: 'print' '(' printList ')' ';';
@@ -56,16 +55,20 @@ ifCommand:
 // Comando while
 whileCommand: 'while' '(' boolExpr ')' '{' command* '}';
 
-// Comando for
-forCommand: 'for' '(' assignment ';' boolExpr ';' assignment ')' '{' command* '}';
-
 // Expressão aritmética
 arithExpr:
 	<assoc = left> arithExpr ('*' | '/') arithExpr
-	| <assoc = left> arithExpr '%' INT
+	| <assoc = left> arithExprInt
 	| <assoc = left> arithExpr ('+' | '-') arithExpr
 	| (INT | FLOAT | ID)
 	| '(' arithExpr ')';
+
+arithExprInt:
+	<assoc = left> arithExprInt ('*' | '/') arithExprInt
+	| <assoc = left> arithExprInt '%' arithExprInt
+	| <assoc = left> arithExprInt ('+' | '-') arithExprInt
+	| (INT | ID)
+	| '(' arithExprInt ')';
 
 // Expressão booleana
 boolExpr:
@@ -83,8 +86,7 @@ ID: [a-zA-Z][a-zA-Z0-9]*;
 // Inteiro
 INT: ('-' | '+')? [0-9]+;
 
-// Inteiro (aceita espaço entre o sinal e o numero)
-// INT: ('-' | '+') WS* [0-9]+;
+// Inteiro (aceita espaço entre o sinal e o numero) INT: ('-' | '+') WS* [0-9]+;
 
 // Float
 FLOAT: ('-' | '+')? [0-9]+ '.' [0-9]*;
