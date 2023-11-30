@@ -60,14 +60,14 @@ arithExpr:
 	<assoc = left> arithExpr ('*' | '/') arithExpr
 	| <assoc = left> arithExprInt
 	| <assoc = left> arithExpr ('+' | '-') arithExpr
-	| (INT | FLOAT | ID)
+	| ('-' | '+')? (INT | FLOAT | ID)
 	| '(' arithExpr ')';
 
 arithExprInt:
 	<assoc = left> arithExprInt ('*' | '/') arithExprInt
 	| <assoc = left> arithExprInt '%' arithExprInt
 	| <assoc = left> arithExprInt ('+' | '-') arithExprInt
-	| (INT | ID)
+	| ('-' | '+')? (INT | ID)
 	| '(' arithExprInt ')';
 
 // Expressão booleana
@@ -84,9 +84,7 @@ relOp: '>=' | '<=' | '<' | '>' | '==' | '!=';
 ID: [a-zA-Z][a-zA-Z0-9]*;
 
 // Inteiro
-INT: ('-' | '+')? [0-9]+;
-
-// Inteiro (aceita espaço entre o sinal e o numero) INT: ('-' | '+') WS* [0-9]+;
+INT: [0-9]+;
 
 // Float
 FLOAT: ('-' | '+')? [0-9]+ '.' [0-9]*;
