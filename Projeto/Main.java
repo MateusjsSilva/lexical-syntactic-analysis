@@ -9,24 +9,25 @@ import org.antlr.v4.runtime.tree.ParseTree;
 public class Main {
     public static void main(String[] args) throws Exception {
 
+        // Read the content of the file into a string
         String code = new String(Files.readAllBytes(Paths.get("test/teste.txt")));
 
-        // cria um CharStream que lê do código de teste
+        // Create a CharStream that reads from the test file's code
         CharStream input = CharStreams.fromString(code);
 
-        // cria um lexer que alimenta fora do CharStream
+        // Create a lexer instance for processing the CharStream input
         SimpAlgLexer lexer = new SimpAlgLexer(input);
 
-        // cria um buffer de tokens puxados do lexer
+        // Create a token stream from the lexer to be used by the parser
         CommonTokenStream tokens = new CommonTokenStream(lexer);
 
-        // cria um parser que alimenta fora do buffer de tokens
+        // Create a parser using the token stream
         SimpAlgParser parser = new SimpAlgParser(tokens);
 
-        // começa a análise na regra init
+        // Parse the input starting from the 'program' rule in the grammar
         ParseTree tree = parser.program();
 
-        // imprime a árvore de análise no console
+        // Print the parse tree to the console
         System.out.println(tree.toStringTree(parser));
     }
 }
